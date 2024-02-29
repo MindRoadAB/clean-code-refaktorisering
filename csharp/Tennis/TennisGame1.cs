@@ -1,81 +1,79 @@
+using System;
+using System.Collections.Generic;
+
 namespace Tennis
 {
     public class TennisGame1 : ITennisGame
     {
-        private int m_score1 = 0;
-        private int m_score2 = 0;
-        private string player1Name;
-        private string player2Name;
+        private Dictionary<string, int> playerScores;
+        private readonly string player1Name;
+        private readonly string player2Name;
+
+        private static readonly string[] scoreNames =
+        {
+            "Love",
+            "Fifteen",
+            "Thirty",
+            "Forty"
+        };
+
+        private const int FirstTiebreakScore = 4;
 
         public TennisGame1(string player1Name, string player2Name)
         {
             this.player1Name = player1Name;
             this.player2Name = player2Name;
+
+            playerScores = new Dictionary<string, int>()
+            {
+                { player1Name, 0 },
+                { player2Name, 0 },
+            };
         }
 
         public void WonPoint(string playerName)
         {
-            if (playerName == "player1")
-                m_score1 += 1;
-            else
-                m_score2 += 1;
+            // Hate identifying players by name, should identify by index/enum
+            if (!playerScores.ContainsKey(playerName))
+            {
+                throw new TennisException($"Invalid tennis player name: {playerName}");
+            }
+
+            playerScores[playerName]++;
+        }
+
+        private int GetPlayerScore(string playerName)
+        {
+            return playerScores[playerName];
         }
 
         public string GetScore()
         {
-            string score = "";
-            var tempScore = 0;
-            if (m_score1 == m_score2)
-            {
-                switch (m_score1)
-                {
-                    case 0:
-                        score = "Love-All";
-                        break;
-                    case 1:
-                        score = "Fifteen-All";
-                        break;
-                    case 2:
-                        score = "Thirty-All";
-                        break;
-                    default:
-                        score = "Deuce";
-                        break;
+            int p1Score = GetPlayerScore(player1Name);
+            int p2Score = GetPlayerScore(player2Name);
 
-                }
-            }
-            else if (m_score1 >= 4 || m_score2 >= 4)
+            if (p1Score == p2Score)
             {
-                var minusResult = m_score1 - m_score2;
-                if (minusResult == 1) score = "Advantage player1";
-                else if (minusResult == -1) score = "Advantage player2";
-                else if (minusResult >= 2) score = "Win for player1";
-                else score = "Win for player2";
-            }
-            else
-            {
-                for (var i = 1; i < 3; i++)
+                if (p1Score >= FirstTiebreakScore - 1)
                 {
-                    if (i == 1) tempScore = m_score1;
-                    else { score += "-"; tempScore = m_score2; }
-                    switch (tempScore)
-                    {
-                        case 0:
-                            score += "Love";
-                            break;
-                        case 1:
-                            score += "Fifteen";
-                            break;
-                        case 2:
-                            score += "Thirty";
-                            break;
-                        case 3:
-                            score += "Forty";
-                            break;
-                    }
+                    return "Deuce";
                 }
+
+                return $"{scoreNames[p1Score]}-All";
             }
-            return score;
+            
+            if (p1Score >= FirstTiebreakScore || p2Score >= FirstTiebreakScore)
+            {
+                // 2-set tiebreakers, first player who wins two in a row wins
+                int deltaScore = p1Score - p2Score;
+                string leadingPlayer = deltaScore > 0 ? player1Name : player2Name;
+                bool isWin = Math.Abs(deltaScore) > 1;
+                string initialText = isWin ? "Win for" : "Advantage";
+
+                return $"{initialText} {leadingPlayer}";
+            }
+
+            return $"{scoreNames[p1Score]}-{scoreNames[p2Score]}";
         }
     }
 }
