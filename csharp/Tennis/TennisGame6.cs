@@ -7,8 +7,8 @@ public class TennisGame6 : ITennisGame
 
     public TennisGame6(string player1Name, string player2Name)
     {
-        this.player1 = new Player(player1Name);
-        this.player2 = new Player(player2Name);
+        player1 = new Player(player1Name);
+        player2 = new Player(player2Name);
     }
 
     public void WonPoint(string playerName)
@@ -26,46 +26,25 @@ public class TennisGame6 : ITennisGame
         if (player1.Score == player2.Score)
         {
             // tie score
-            string tieScore;
-            switch (player1.Score)
+            string tieScore = player1.Score switch
             {
-                case 0:
-                    tieScore = "Love-All";
-                    break;
-                case 1:
-                    tieScore = "Fifteen-All";
-                    break;
-                case 2:
-                    tieScore = "Thirty-All";
-                    break;
-                default:
-                    tieScore = "Deuce";
-                    break;
-            }
-
+                0 => "Love-All",
+                1 => "Fifteen-All",
+                2 => "Thirty-All",
+                _ => "Deuce",
+            };
             result = tieScore;
         }
         else if (player1.Score >= 4 || player2.Score >= 4)
         {
             // end-game score
-            string endGameScore;
-
-            switch (player1.Score - player2.Score)
+            string endGameScore = (player1.Score - player2.Score) switch
             {
-                case 1:
-                    endGameScore = $"Advantage {player1.Name}";
-                    break;
-                case -1:
-                    endGameScore = $"Advantage {player2.Name}";
-                    break;
-                case >= 2:
-                    endGameScore = $"Win for {player1.Name}";
-                    break;
-                default:
-                    endGameScore = $"Win for {player2.Name}";
-                    break;
-            }
-
+                1 => $"Advantage {player1.Name}",
+                -1 => $"Advantage {player2.Name}",
+                >= 2 => $"Win for {player1.Name}",
+                _ => $"Win for {player2.Name}",
+            };
             result = endGameScore;
         }
         else
