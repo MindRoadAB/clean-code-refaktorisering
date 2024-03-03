@@ -1,17 +1,8 @@
 namespace Tennis
 {
+    using System;
     using static System.Math;
     
-    struct Player{
-        public Player(string name)
-        {
-            this.Score = 0;
-            this.Name = name;
-        }
-        public uint Score { get; set; }
-        public string Name { get; set; }
-    };
-
     public class TennisGame3 : ITennisGame
     {
         Player player1;
@@ -19,15 +10,15 @@ namespace Tennis
 
         public TennisGame3(string player1Name, string player2Name)
         {
-            this.player1 = new Player(player1Name);
-            this.player2 = new Player(player2Name);
+            player1 = new Player(player1Name);
+            player2 = new Player(player2Name);
         }
 
         public string GetScore()
         {
-            bool inFirstThreePoints = player1.Score >= 4 || player2.Score >= 4 || 
-                                      player1.Score + player2.Score >= 6;
-            if (!inFirstThreePoints)
+            bool winPossible = player1.Score >= 4 || player2.Score >= 4 || 
+                               player1.Score + player2.Score >= 6;
+            if (!winPossible)
             {
                 string[] scoreTerms = { "Love", "Fifteen", "Thirty", "Forty" };
                 string player1ScoreTerm = scoreTerms[player1.Score];
@@ -48,10 +39,11 @@ namespace Tennis
 
         public void WonPoint(string playerName)
         {
-            if (playerName == "player1")
-                this.player1.Score += 1;
-            else
-                this.player2.Score += 1;
+            if (playerName == player1.Name)
+                player1.Score += 1;
+            else if (playerName == player2.Name)
+                player2.Score += 1;
+            else throw new ArgumentException("Bad player name");
         }
 
     }
