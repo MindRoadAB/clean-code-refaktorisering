@@ -18,31 +18,39 @@ namespace Tennis
 
         public string GetScore()
         {
-            if (player1.Score == player2.Score)
-            {
-                return player1.Score switch
-                {
-                    0 => "Love-All",
-                    1 => "Fifteen-All",
-                    2 => "Thirty-All",
-                    _ => "Deuce",
-                };
-            }
-            else if (player1.Score >= 4 || player2.Score >= 4)
+            if (player1.Score == player2.Score) return GetTieScoreTerm();
+            
+            if (player1.Score >= 4 || player2.Score >= 4)
             {
                 var scoreDifference = player1.Score - player2.Score;
-                return scoreDifference switch
-                {
-                    1 => "Advantage player1",
-                    -1 => "Advantage player2",
-                    >= 2 => "Win for player1",
-                    _ => "Win for player2",
-                };
+                return GetLateGameScore(scoreDifference);
             }
-            else
+            
+            string scoreTerm1 = GetRegularScoreTerm(player1.Score);
+            string scoreTerm2 = GetRegularScoreTerm(player2.Score);
+            return $"{scoreTerm1}-{scoreTerm2}";
+        }
+
+        private string GetTieScoreTerm()
+        {
+            return player1.Score switch
             {
-                return $"{GetRegularScoreTerm(player1.Score)}-{GetRegularScoreTerm(player2.Score)}";
-            }
+                0 => "Love-All",
+                1 => "Fifteen-All",
+                2 => "Thirty-All",
+                _ => "Deuce",
+            };
+        }
+
+        private static string GetLateGameScore(int scoreDifference)
+        {
+            return scoreDifference switch
+            {
+                1 => "Advantage player1",
+                -1 => "Advantage player2",
+                >= 2 => "Win for player1",
+                _ => "Win for player2",
+            };
         }
 
         private static string GetRegularScoreTerm(int score)
