@@ -19,7 +19,6 @@ namespace Tennis
         public string GetScore()
         {
             string score = "";
-            var tempScore = 0;
             if (player1.Score == player2.Score)
             {
                 switch (player1.Score)
@@ -49,28 +48,20 @@ namespace Tennis
             }
             else
             {
-                for (var i = 1; i < 3; i++)
-                {
-                    if (i == 1) tempScore = player1.Score;
-                    else { score += "-"; tempScore = player2.Score; }
-                    switch (tempScore)
-                    {
-                        case 0:
-                            score += "Love";
-                            break;
-                        case 1:
-                            score += "Fifteen";
-                            break;
-                        case 2:
-                            score += "Thirty";
-                            break;
-                        case 3:
-                            score += "Forty";
-                            break;
-                    }
-                }
+                score = $"{GetRegularScoreTerm(player1.Score)}-{GetRegularScoreTerm(player2.Score)}";
             }
             return score;
+        }
+
+        private static string GetRegularScoreTerm(int score)
+        {
+            return score switch
+            {
+                0 => "Love",
+                1 => "Fifteen",
+                2 => "Thirty",
+                _ => "Forty",
+            };
         }
     }
 }
