@@ -16,8 +16,10 @@ namespace Tennis
             {
                 if (player1.Score == player2.Score)
                     return "Deuce";
+                
                 string highScoreName = player1.Score > player2.Score 
-                                        ? player1.Name : player2.Name;
+                                        ? player1.Name
+                                        : player2.Name;
                 bool isWin = Abs(player1.Score - player2.Score) >= 2;
                 return isWin ? "Win for " + highScoreName
                              : "Advantage " + highScoreName;
@@ -27,7 +29,8 @@ namespace Tennis
                 string[] scoreTerms = { "Love", "Fifteen", "Thirty", "Forty" };
                 string player1ScoreTerm = scoreTerms[player1.Score];
                 return (player1.Score == player2.Score) 
-                        ? player1ScoreTerm + "-All" : player1ScoreTerm + "-" + scoreTerms[player2.Score];
+                        ? player1ScoreTerm + "-All" 
+                        : player1ScoreTerm + "-" + scoreTerms[player2.Score];
             }
         }
 
