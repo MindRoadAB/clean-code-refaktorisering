@@ -42,14 +42,14 @@ namespace Tennis
             };
         }
 
-        private static string GetLateGameScore(int scoreDifference)
+        private string GetLateGameScore(int scoreDifference)
         {
             return scoreDifference switch
             {
-                1 => "Advantage player1",
-                -1 => "Advantage player2",
-                >= 2 => "Win for player1",
-                _ => "Win for player2",
+                1 => $"Advantage {player1.Name}",
+                -1 => $"Advantage {player2.Name}",
+                >= 2 => $"Win for {player1.Name}",
+                _ => $"Win for {player2.Name}",
             };
         }
 
