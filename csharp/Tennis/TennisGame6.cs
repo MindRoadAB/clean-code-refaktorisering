@@ -23,31 +23,22 @@ public class TennisGame6 : ITennisGame
 
     public string GetScore()
     {
-        string result;
-
         if (player1.Score == player2.Score)
         {
-            string tieScore = GetTieScoreTerm();
-            result = tieScore;
+            return GetTieScoreTerm();
         }
         else if (player1.Score >= 4 || player2.Score >= 4)
         {
-            string endGameScore = GetEndgameScoreTerm();
-            result = endGameScore;
+            return GetEndgameScoreTerm();
         }
         else
         {
             // regular score
-            string regularScore;
             string score1 = GetRegularScoreTerm(player1.Score);
             string score2 = GetRegularScoreTerm(player2.Score);
             
-            regularScore = $"{score1}-{score2}";
-
-            result = regularScore;
+            return $"{score1}-{score2}";
         }
-
-        return result;
     }
 
     private static string GetRegularScoreTerm(int score)
