@@ -1,42 +1,49 @@
 namespace Tennis
 {
+    struct Player{
+        public Player(string name)
+        {
+            this.Score = 0;
+            this.Name = name;
+        }
+        public uint Score { get; set; }
+        public string Name { get; set; }
+    };
     public class TennisGame3 : ITennisGame
     {
-        private int p2;
-        private int p1;
-        private string p1N;
-        private string p2N;
+        Player player1;
+        Player player2;
 
         public TennisGame3(string player1Name, string player2Name)
         {
-            this.p1N = player1Name;
-            this.p2N = player2Name;
+            this.player1 = new Player(player1Name);
+            this.player2 = new Player(player2Name);
         }
 
         public string GetScore()
         {
             string s;
-            if ((p1 < 4 && p2 < 4) && (p1 + p2 < 6))
+            if ((player1.Score < 4 && player2.Score < 4) && (player1.Score + player2.Score < 6))
             {
                 string[] p = { "Love", "Fifteen", "Thirty", "Forty" };
-                s = p[p1];
-                return (p1 == p2) ? s + "-All" : s + "-" + p[p2];
+                s = p[player1.Score];
+                return (player1.Score == player2.Score) ? s + "-All" : s + "-" + p[player2.Score];
             }
             else
             {
-                if (p1 == p2)
+                if (player1.Score == player2.Score)
                     return "Deuce";
-                s = p1 > p2 ? p1N : p2N;
-                return ((p1 - p2) * (p1 - p2) == 1) ? "Advantage " + s : "Win for " + s;
+                s = player1.Score > player2.Score ? player1.Name : player2.Name;
+                return ((player1.Score - player2.Score) * (player1.Score - player2.Score) == 1) ? "Advantage " + s : "Win for " + s;
             }
         }
 
         public void WonPoint(string playerName)
         {
             if (playerName == "player1")
-                this.p1 += 1;
+                this.player1.Score += 1;
             else
-                this.p2 += 1;
+                this.player2.Score += 1;
         }
 
     }
