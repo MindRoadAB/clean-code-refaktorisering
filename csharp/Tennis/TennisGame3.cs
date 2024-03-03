@@ -1,5 +1,7 @@
 namespace Tennis
 {
+    using static System.Math;
+    
     struct Player{
         public Player(string name)
         {
@@ -9,6 +11,7 @@ namespace Tennis
         public uint Score { get; set; }
         public string Name { get; set; }
     };
+
     public class TennisGame3 : ITennisGame
     {
         Player player1;
@@ -22,19 +25,24 @@ namespace Tennis
 
         public string GetScore()
         {
-            string s;
-            if ((player1.Score < 4 && player2.Score < 4) && (player1.Score + player2.Score < 6))
+            bool inFirstThreePoints = player1.Score >= 4 || player2.Score >= 4 || 
+                                      player1.Score + player2.Score >= 6;
+            if (!inFirstThreePoints)
             {
-                string[] p = { "Love", "Fifteen", "Thirty", "Forty" };
-                s = p[player1.Score];
-                return (player1.Score == player2.Score) ? s + "-All" : s + "-" + p[player2.Score];
+                string[] scoreTerms = { "Love", "Fifteen", "Thirty", "Forty" };
+                string player1ScoreTerm = scoreTerms[player1.Score];
+                return (player1.Score == player2.Score) 
+                        ? player1ScoreTerm + "-All" : player1ScoreTerm + "-" + scoreTerms[player2.Score];
             }
             else
             {
                 if (player1.Score == player2.Score)
                     return "Deuce";
-                s = player1.Score > player2.Score ? player1.Name : player2.Name;
-                return ((player1.Score - player2.Score) * (player1.Score - player2.Score) == 1) ? "Advantage " + s : "Win for " + s;
+                string highScoreName = player1.Score > player2.Score 
+                                        ? player1.Name : player2.Name;
+                bool isWin = Abs(player1.Score - player2.Score) >= 2;
+                return isWin ? "Win for " + highScoreName
+                             : "Advantage " + highScoreName;
             }
         }
 
