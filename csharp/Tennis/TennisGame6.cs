@@ -2,16 +2,10 @@ using System.Diagnostics;
 
 namespace Tennis;
 
-public class TennisGame6 : ITennisGame
+public class TennisGame6(string player1Name, string player2Name) : ITennisGame
 {
-    Player player1;
-    Player player2;
-
-    public TennisGame6(string player1Name, string player2Name)
-    {
-        player1 = new Player(player1Name);
-        player2 = new Player(player2Name);
-    }
+    private Player player1 = new(player1Name);
+    private Player player2 = new(player2Name);
 
     public void WonPoint(string playerName)
     {
