@@ -21,30 +21,24 @@ namespace Tennis
             string score = "";
             if (player1.Score == player2.Score)
             {
-                switch (player1.Score)
+                score = player1.Score switch
                 {
-                    case 0:
-                        score = "Love-All";
-                        break;
-                    case 1:
-                        score = "Fifteen-All";
-                        break;
-                    case 2:
-                        score = "Thirty-All";
-                        break;
-                    default:
-                        score = "Deuce";
-                        break;
-
-                }
+                    0 => "Love-All",
+                    1 => "Fifteen-All",
+                    2 => "Thirty-All",
+                    _ => "Deuce",
+                };
             }
             else if (player1.Score >= 4 || player2.Score >= 4)
             {
-                var minusResult = player1.Score - player2.Score;
-                if (minusResult == 1) score = "Advantage player1";
-                else if (minusResult == -1) score = "Advantage player2";
-                else if (minusResult >= 2) score = "Win for player1";
-                else score = "Win for player2";
+                var scoreDifference = player1.Score - player2.Score;
+                score = scoreDifference switch
+                {
+                    1 => "Advantage player1",
+                    -1 => "Advantage player2",
+                    >= 2 => "Win for player1",
+                    _ => "Win for player2",
+                };
             }
             else
             {
