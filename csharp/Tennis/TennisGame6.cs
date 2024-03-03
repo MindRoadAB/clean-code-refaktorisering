@@ -41,7 +41,6 @@ public class TennisGame6(string player1Name, string player2Name) : ITennisGame
 
     private string GetEndgameScoreTerm()
     {
-        // end-game score
         return (player1.Score - player2.Score) switch
         {
             1 => $"Advantage {player1.Name}",
@@ -54,7 +53,6 @@ public class TennisGame6(string player1Name, string player2Name) : ITennisGame
 
     private string GetTieScoreTerm()
     {
-        // tie score
         return player1.Score switch
         {
             0 => "Love-All",
