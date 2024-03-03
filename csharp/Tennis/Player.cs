@@ -2,12 +2,8 @@
 
 namespace Tennis;
 
-struct Player{
-        public Player(string name)
-        {
-            this.Score = 0;
-            this.Name = name;
-        }
-        public uint Score { get; set; }
-        public string Name { get; set; }
-    };
+struct Player(string name)
+{
+    public int Score { get; set; } = 0;
+    public string Name { get; set; } = name;
+};
