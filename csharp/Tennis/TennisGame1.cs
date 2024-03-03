@@ -18,10 +18,9 @@ namespace Tennis
 
         public string GetScore()
         {
-            string score = "";
             if (player1.Score == player2.Score)
             {
-                score = player1.Score switch
+                return player1.Score switch
                 {
                     0 => "Love-All",
                     1 => "Fifteen-All",
@@ -32,7 +31,7 @@ namespace Tennis
             else if (player1.Score >= 4 || player2.Score >= 4)
             {
                 var scoreDifference = player1.Score - player2.Score;
-                score = scoreDifference switch
+                return scoreDifference switch
                 {
                     1 => "Advantage player1",
                     -1 => "Advantage player2",
@@ -42,9 +41,8 @@ namespace Tennis
             }
             else
             {
-                score = $"{GetRegularScoreTerm(player1.Score)}-{GetRegularScoreTerm(player2.Score)}";
+                return $"{GetRegularScoreTerm(player1.Score)}-{GetRegularScoreTerm(player2.Score)}";
             }
-            return score;
         }
 
         private static string GetRegularScoreTerm(int score)
