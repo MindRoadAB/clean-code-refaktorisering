@@ -16,6 +16,10 @@ const std::string getWinOrAdvantage(int scoreDifference)
     if (it != outcomes.end())
     {
         return it->second;
+    } 
+    else
+    {
+        return scoreDifference > 0 ? outcomes[2] : outcomes[-2];
     }
 }
 
