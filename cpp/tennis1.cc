@@ -1,58 +1,61 @@
 #include <string>
+#include <map>
 
-const std::string tennis_score(int p1Score, int p2Score) {
-    std::string score = "";
-    int tempScore=0;
-    if (p1Score==p2Score)
-    {
-        switch (p1Score)
-        {
-            case 0:
-                    score = "Love-All";
-                break;
-            case 1:
-                    score = "Fifteen-All";
-                break;
-            case 2:
-                    score = "Thirty-All";
-                break;
-            default:
-                    score = "Deuce";
-                break;
+const std::string getIndividualScore(int score)
+{
+    constexpr const char* scoreList[4] = {"Love", "Fifteen", "Thirty", "Forty"};
+    return scoreList[score];
+}
 
-        }
-    }
-    else if (p1Score>=4 || p2Score>=4)
+const std::string getWinOrAdvantage(int scoreDifference)
+{
+    std::map<int, std::string> outcomes = {
+        {1, "Advantage player1"}, {-1, "Advantage player2"}, {2, "Win for player1"}, {-2, "Win for player2"}};
+
+    auto it = outcomes.find(scoreDifference);
+    if (it != outcomes.end())
     {
-        int minusResult = p1Score-p2Score;
-        if (minusResult==1) score ="Advantage player1";
-        else if (minusResult ==-1) score ="Advantage player2";
-        else if (minusResult>=2) score = "Win for player1";
-        else score ="Win for player2";
+        return it->second;
     }
     else
     {
-        for (int i=1; i<3; i++)
-        {
-            if (i==1) tempScore = p1Score;
-            else { score+="-"; tempScore = p2Score;}
-            switch(tempScore)
-            {
-                case 0:
-                    score+="Love";
-                    break;
-                case 1:
-                    score+="Fifteen";
-                    break;
-                case 2:
-                    score+="Thirty";
-                    break;
-                case 3:
-                    score+="Forty";
-                    break;
-            }
-        }
+        return scoreDifference > 0 ? outcomes[2] : outcomes[-2];
     }
-    return score;
-    
+}
+
+inline const std::string getEqualScore(int p1CurrentScore, int deuceCriteria = 3)
+{
+    return (p1CurrentScore >= deuceCriteria) ? "Deuce" : getIndividualScore(p1CurrentScore) + "-All";
+}
+
+inline const std::string getCurrentScoreBetweenPlayers(int p1CurrentScore, int p2CurrentScore)
+{
+    return getIndividualScore(p1CurrentScore) + "-" + getIndividualScore(p2CurrentScore);
+}
+
+inline const int isMatchPoint(int p1CurrentScore, int p2CurrentScore, int matchPointCriteria = 4)
+{
+    return p1CurrentScore >= matchPointCriteria || p2CurrentScore >= matchPointCriteria;
+}
+
+inline const int calculateScoreDifference(int p1CurrentScore, int p2CurrentScore)
+{
+    return p1CurrentScore - p2CurrentScore;
+}
+
+const std::string tennisScore(int p1CurrentScore, int p2CurrentScore)
+{
+    bool isGameTied = p1CurrentScore == p2CurrentScore ? true : false;
+    if (isGameTied)
+    {
+        return getEqualScore(p1CurrentScore);
+    }
+    else if (isMatchPoint(p1CurrentScore, p2CurrentScore))
+    {
+        return getWinOrAdvantage(calculateScoreDifference(p1CurrentScore, p2CurrentScore));
+    }
+    else
+    {
+        return getCurrentScoreBetweenPlayers(p1CurrentScore, p2CurrentScore);
+    }
 }
