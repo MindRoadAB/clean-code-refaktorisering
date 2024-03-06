@@ -17,10 +17,6 @@ const std::string getWinOrAdvantage(int scoreDifference)
     {
         return it->second;
     }
-    else
-    {
-        return scoreDifference > 0 ? outcomes[2] : outcomes[-2];
-    }
 }
 
 inline const std::string getEqualScore(int p1CurrentScore, int deuceCriteria = 3)
