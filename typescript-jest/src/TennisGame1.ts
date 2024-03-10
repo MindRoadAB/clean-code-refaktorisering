@@ -24,19 +24,23 @@ export class TennisGame1 implements TennisGame {
     let score: string = '';
     let tempScore: number = 0;
 
-    if (this.scoreIsEqual()) {
+    if (this.isScoreEqual()) {
       score = this.getEqualScoreStr();
-    } else if (this.isMatchpointOrWin()) {
-      const minusResult: number = this.playerList[0].score - this.playerList[1].score;
-      if (minusResult === 1) score = 'Advantage player1';
-      else if (minusResult === -1) score = 'Advantage player2';
-      else if (minusResult >= 2) score = 'Win for player1';
-      else score = 'Win for player2';
+    } else if (this.isWin()) {
+      const deltaResult = this.playerList[0].score - this.playerList[1].score;
+      score = deltaResult > 0 ? 'Win for player1' : 'Win for player2'
+    } else if (this.isMatchpoint()) {
+      const deltaResult = this.playerList[0].score - this.playerList[1].score;
+      score = deltaResult > 0 ? 'Advantage player1' : 'Advantage player2'
     }
     else {
       for (let i = 1; i < 3; i++) {
-        if (i === 1) tempScore = this.playerList[0].score;
-        else { score += '-'; tempScore = this.playerList[1].score; }
+        if (i === 1) {
+          tempScore = this.playerList[0].score;
+        } else {
+          score += '-';
+          tempScore = this.playerList[1].score;
+        }
         switch (tempScore) {
           case 0:
             score += 'Love';
@@ -56,8 +60,14 @@ export class TennisGame1 implements TennisGame {
     return score;
   }
 
-  private isMatchpointOrWin() {
-    return this.playerList[0].score >= 4 || this.playerList[1].score >= 4;
+  private isWin() {
+    const deltaResult = Math.abs(this.playerList[0].score - this.playerList[1].score);
+    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && deltaResult > 1;
+  }
+
+  private isMatchpoint() {
+    const deltaResult = Math.abs(this.playerList[0].score - this.playerList[1].score);
+    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && deltaResult == 1;
   }
 
   private getEqualScoreStr() {
@@ -73,7 +83,7 @@ export class TennisGame1 implements TennisGame {
     }
   }
 
-  private scoreIsEqual() {
+  private isScoreEqual() {
     return this.playerList[0].score === this.playerList[1].score
   }
 }
