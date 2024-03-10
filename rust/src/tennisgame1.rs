@@ -2,69 +2,66 @@ use crate::TennisGame;
 
 #[derive(Default)]
 pub struct TennisGame1 {
-    score1: u8,
-    score2: u8,
-    _player1_name: String,
-    _player2_name: String,
+    score_player1: u8,
+    score_player2: u8,
 }
 
 impl TennisGame1 {
     pub fn new() -> Self {
-        TennisGame1::default()
+        Self {
+            score_player1: 0,
+            score_player2: 0,
+        }
     }
+	
+	pub fn score_to_string(score: u8) -> &'static str {
+		match score {
+            0 => "Love",
+            1 => "Fifteen",
+            2 => "Thirty",
+            3 => "Forty",
+            _ => ""
+		}
+	}
 }
 
 impl TennisGame for TennisGame1 {
     fn clear(&mut self) {
-        self.score1 = 0;
-        self.score2 = 0;
+        self.score_player1 = 0;
+        self.score_player2 = 0;
     }
+
     fn won_point(&mut self, player_name: &str) {
         if player_name == "player1" {
-            self.score1 += 1;
+            self.score_player1 += 1;
         } else {
-            self.score2 += 1;
+            self.score_player2 += 1;
         }
     }
+
     fn get_score(&self) -> String {
-        match (self.score1, self.score2) {
-            (a, b) if a == b => match a {
-                0 => return "Love-All".to_owned(),
-                1 => return "Fifteen-All".to_owned(),
-                2 => return "Thirty-All".to_owned(),
-                _ => return "Deuce".to_owned(),
-            },
-            (a, b) if a >= 4 || b >= 4 => {
-                let minus_result = self.score1 as i8 - self.score2 as i8;
-                if minus_result == 1 {
-                    return "Advantage player1".to_owned();
-                } else if minus_result == -1i8 {
-                    return "Advantage player2".to_owned();
-                } else if minus_result >= 2 {
-                    return "Win for player1".to_owned();
-                }
-                "Win for player2".to_owned()
+        let mut current_score = String::new();
+		if self.score_player1 == self.score_player2 {
+			match self.score_player1 {
+                0 => current_score.push_str("Love-All"),
+                1 => current_score.push_str("Fifteen-All"),
+                2 => current_score.push_str("Thirty-All"),
+                _ => current_score.push_str("Deuce"),
             }
-            _ => {
-                let mut temp_score: u8;
-                let mut score = String::new();
-                for i in 1..3 {
-                    if i == 1 {
-                        temp_score = self.score1;
-                    } else {
-                        score.push_str("-");
-                        temp_score = self.score2;
-                    }
-                    match temp_score {
-                        0 => score.push_str("Love"),
-                        1 => score.push_str("Fifteen"),
-                        2 => score.push_str("Thirty"),
-                        3 => score.push_str("Forty"),
-                        _ => {}
-                    }
-                }
-                return score;
-            }
+		} else if (self.score_player1 >= 4) || (self.score_player2 >= 4) {
+			let score_difference = self.score_player1 as i8 - self.score_player2 as i8;
+			match score_difference {
+				s if s <= -2 => current_score.push_str("Win for player2"),
+				-1 => current_score.push_str("Advantage player2"),
+				 1 => current_score.push_str("Advantage player1"),
+				s if s >= 2 => current_score.push_str("Win for player1"),
+				_ => {}
+			}
+		} else {
+			current_score.push_str(TennisGame1::score_to_string(self.score_player1));
+			current_score.push_str("-");
+			current_score.push_str(TennisGame1::score_to_string(self.score_player2));
         }
+		return current_score;
     }
 }
