@@ -23,14 +23,13 @@ export class TennisGame1 implements TennisGame {
   getScore(): string {
     let score: string = '';
     let tempScore: number = 0;
+    const deltaResult = this.playerList[0].score - this.playerList[1].score;
 
-    if (this.isScoreEqual()) {
+    if (this.isScoreEqual(deltaResult)) {
       score = this.getEqualScoreStr();
-    } else if (this.isWin()) {
-      const deltaResult = this.playerList[0].score - this.playerList[1].score;
+    } else if (this.isWin(deltaResult)) {
       score = deltaResult > 0 ? 'Win for player1' : 'Win for player2'
-    } else if (this.isMatchpoint()) {
-      const deltaResult = this.playerList[0].score - this.playerList[1].score;
+    } else if (this.isMatchPoint(deltaResult)) {
       score = deltaResult > 0 ? 'Advantage player1' : 'Advantage player2'
     }
     else {
@@ -60,14 +59,12 @@ export class TennisGame1 implements TennisGame {
     return score;
   }
 
-  private isWin() {
-    const deltaResult = Math.abs(this.playerList[0].score - this.playerList[1].score);
-    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && deltaResult > 1;
+  private isWin(deltaResult: number) {
+    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && Math.abs(deltaResult) > 1;
   }
 
-  private isMatchpoint() {
-    const deltaResult = Math.abs(this.playerList[0].score - this.playerList[1].score);
-    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && deltaResult == 1;
+  private isMatchPoint(deltaResult: number) {
+    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && Math.abs(deltaResult) == 1;
   }
 
   private getEqualScoreStr() {
@@ -83,7 +80,7 @@ export class TennisGame1 implements TennisGame {
     }
   }
 
-  private isScoreEqual() {
-    return this.playerList[0].score === this.playerList[1].score
+  private isScoreEqual(deltaResult: number) {
+    return deltaResult === 0;
   }
 }
