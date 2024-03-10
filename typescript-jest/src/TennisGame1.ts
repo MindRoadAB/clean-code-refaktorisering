@@ -6,22 +6,26 @@ interface Player {
 }
 
 export class TennisGame1 implements TennisGame {
-  private players: { [id: string]: number } =  {}
+  private playerList: Player[] = []
 
   constructor(player1Name: string, player2Name: string) {
-    this.players[player1Name] = 0;
-    this.players[player2Name] = 0;
+    this.playerList.push({name: player1Name, score: 0})
+    this.playerList.push({name: player2Name, score: 0})
   }
 
   wonPoint(playerName: string): void {
-    this.players[playerName] += 1;
+    const player = this.playerList.find(_ => _.name === playerName)
+    if (player) {
+      player.score += 1
+    }
   }
 
   getScore(): string {
     let score: string = '';
     let tempScore: number = 0;
-    if (this.m_score1 === this.m_score2) {
-      switch (this.m_score1) {
+
+    if (this.playerList[0].score === this.playerList[1].score) {
+      switch (this.playerList[0].score) {
         case 0:
           score = 'Love-All';
           break;
@@ -36,9 +40,8 @@ export class TennisGame1 implements TennisGame {
           break;
 
       }
-    }
-    else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-      const minusResult: number = this.m_score1 - this.m_score2;
+    } else if (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) {
+      const minusResult: number = this.playerList[0].score - this.playerList[1].score;
       if (minusResult === 1) score = 'Advantage player1';
       else if (minusResult === -1) score = 'Advantage player2';
       else if (minusResult >= 2) score = 'Win for player1';
@@ -46,8 +49,8 @@ export class TennisGame1 implements TennisGame {
     }
     else {
       for (let i = 1; i < 3; i++) {
-        if (i === 1) tempScore = this.m_score1;
-        else { score += '-'; tempScore = this.m_score2; }
+        if (i === 1) tempScore = this.playerList[0].score;
+        else { score += '-'; tempScore = this.playerList[1].score; }
         switch (tempScore) {
           case 0:
             score += 'Love';
