@@ -1,21 +1,20 @@
 import { TennisGame } from './TennisGame';
 
+interface Player {
+  name: string;
+  score: number;
+}
+
 export class TennisGame1 implements TennisGame {
-  private m_score1: number = 0;
-  private m_score2: number = 0;
-  private player1Name: string;
-  private player2Name: string;
+  private players: { [id: string]: number } =  {}
 
   constructor(player1Name: string, player2Name: string) {
-    this.player1Name = player1Name;
-    this.player2Name = player2Name;
+    this.players[player1Name] = 0;
+    this.players[player2Name] = 0;
   }
 
   wonPoint(playerName: string): void {
-    if (playerName === 'player1')
-      this.m_score1 += 1;
-    else
-      this.m_score2 += 1;
+    this.players[playerName] += 1;
   }
 
   getScore(): string {
