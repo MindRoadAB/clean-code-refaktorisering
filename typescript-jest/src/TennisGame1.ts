@@ -71,9 +71,6 @@ export class TennisGame1 implements TennisGame {
   }
 
   private scoreIsEqual() {
-    return this.playerList.reduce(
-        (sameScore, player) =>
-            player.score === sameScore ? sameScore : -1, this.playerList[0].score)
-        > -1;
+    return this.playerList[0].score === this.playerList[1].score
   }
 }
