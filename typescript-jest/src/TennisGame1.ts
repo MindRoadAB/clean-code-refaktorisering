@@ -39,27 +39,16 @@ export class TennisGame1 implements TennisGame {
     return score;
   }
 
-  private getScoreText(tempScore: number) {
-    switch (tempScore) {
-      case 0:
-        return 'Love';
-      case 1:
-        return  'Fifteen';
-      case 2:
-        return  'Thirty';
-      case 3:
-        return  'Forty';
-      default:
-        return ''
-    }
-  }
-
   private isWin(deltaResult: number) {
     return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && Math.abs(deltaResult) > 1;
   }
 
   private isMatchPoint(deltaResult: number) {
     return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && Math.abs(deltaResult) == 1;
+  }
+
+  private isScoreEqual(deltaResult: number) {
+    return deltaResult === 0;
   }
 
   private getEqualScoreStr() {
@@ -75,7 +64,19 @@ export class TennisGame1 implements TennisGame {
     }
   }
 
-  private isScoreEqual(deltaResult: number) {
-    return deltaResult === 0;
+  private getScoreText(tempScore: number) {
+    switch (tempScore) {
+      case 0:
+        return 'Love';
+      case 1:
+        return  'Fifteen';
+      case 2:
+        return  'Thirty';
+      case 3:
+        return  'Forty';
+      default:
+        return ''
+    }
   }
+
 }
