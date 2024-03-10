@@ -25,22 +25,8 @@ export class TennisGame1 implements TennisGame {
     let tempScore: number = 0;
 
     if (this.scoreIsEqual()) {
-      switch (this.playerList[0].score) {
-        case 0:
-          score = 'Love-All';
-          break;
-        case 1:
-          score = 'Fifteen-All';
-          break;
-        case 2:
-          score = 'Thirty-All';
-          break;
-        default:
-          score = 'Deuce';
-          break;
-
-      }
-    } else if (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) {
+      score = this.getEqualScoreStr();
+    } else if (this.isMatchpointOrWin()) {
       const minusResult: number = this.playerList[0].score - this.playerList[1].score;
       if (minusResult === 1) score = 'Advantage player1';
       else if (minusResult === -1) score = 'Advantage player2';
@@ -68,6 +54,23 @@ export class TennisGame1 implements TennisGame {
       }
     }
     return score;
+  }
+
+  private isMatchpointOrWin() {
+    return this.playerList[0].score >= 4 || this.playerList[1].score >= 4;
+  }
+
+  private getEqualScoreStr() {
+    switch (this.playerList[0].score) {
+      case 0:
+        return 'Love-All';
+      case 1:
+        return 'Fifteen-All';
+      case 2:
+        return 'Thirty-All';
+      default:
+        return 'Deuce';
+    }
   }
 
   private scoreIsEqual() {
