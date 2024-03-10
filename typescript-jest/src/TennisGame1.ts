@@ -24,7 +24,7 @@ export class TennisGame1 implements TennisGame {
     let score: string = '';
     let tempScore: number = 0;
 
-    if (this.playerList[0].score === this.playerList[1].score) {
+    if (this.scoreIsEqual()) {
       switch (this.playerList[0].score) {
         case 0:
           score = 'Love-All';
@@ -68,5 +68,12 @@ export class TennisGame1 implements TennisGame {
       }
     }
     return score;
+  }
+
+  private scoreIsEqual() {
+    return this.playerList.reduce(
+        (sameScore, player) =>
+            player.score === sameScore ? sameScore : -1, this.playerList[0].score)
+        > -1;
   }
 }
