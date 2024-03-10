@@ -22,7 +22,6 @@ export class TennisGame1 implements TennisGame {
 
   getScore(): string {
     let score: string = '';
-    let tempScore: number = 0;
     const deltaResult = this.playerList[0].score - this.playerList[1].score;
 
     if (this.isScoreEqual(deltaResult)) {
@@ -33,30 +32,26 @@ export class TennisGame1 implements TennisGame {
       score = deltaResult > 0 ? 'Advantage player1' : 'Advantage player2'
     }
     else {
-      for (let i = 1; i < 3; i++) {
-        if (i === 1) {
-          tempScore = this.playerList[0].score;
-        } else {
-          score += '-';
-          tempScore = this.playerList[1].score;
-        }
-        switch (tempScore) {
-          case 0:
-            score += 'Love';
-            break;
-          case 1:
-            score += 'Fifteen';
-            break;
-          case 2:
-            score += 'Thirty';
-            break;
-          case 3:
-            score += 'Forty';
-            break;
-        }
-      }
+      score += this.getScoreText(this.playerList[0].score);
+      score += '-';
+      score += this.getScoreText(this.playerList[1].score);
     }
     return score;
+  }
+
+  private getScoreText(tempScore: number) {
+    switch (tempScore) {
+      case 0:
+        return 'Love';
+      case 1:
+        return  'Fifteen';
+      case 2:
+        return  'Thirty';
+      case 3:
+        return  'Forty';
+      default:
+        return ''
+    }
   }
 
   private isWin(deltaResult: number) {
