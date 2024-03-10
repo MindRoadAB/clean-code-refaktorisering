@@ -6,37 +6,32 @@ interface Player {
 }
 
 export class TennisGame1 implements TennisGame {
-  private playerList: Player[] = []
+  private playerList: Player[] = [];
 
   constructor(player1Name: string, player2Name: string) {
-    this.playerList.push({name: player1Name, score: 0})
-    this.playerList.push({name: player2Name, score: 0})
+    this.playerList.push({name: player1Name, score: 0});
+    this.playerList.push({name: player2Name, score: 0});
   }
 
   wonPoint(playerName: string): void {
-    const player = this.playerList.find(_ => _.name === playerName)
+    const player = this.playerList.find(_ => _.name === playerName);
     if (player) {
-      player.score += 1
+      player.score += 1;
     }
   }
 
   getScore(): string {
-    let score: string = '';
     const deltaResult = this.playerList[0].score - this.playerList[1].score;
 
     if (this.isScoreEqual(deltaResult)) {
-      score = this.getEqualScoreStr();
+      return this.getEqualScoreStr();
     } else if (this.isWin(deltaResult)) {
-      score = deltaResult > 0 ? 'Win for player1' : 'Win for player2'
+      return deltaResult > 0 ? 'Win for player1' : 'Win for player2';
     } else if (this.isMatchPoint(deltaResult)) {
-      score = deltaResult > 0 ? 'Advantage player1' : 'Advantage player2'
+      return deltaResult > 0 ? 'Advantage player1' : 'Advantage player2';
+    } else {
+      return this.getCurrentScoreText();
     }
-    else {
-      score += this.getScoreText(this.playerList[0].score);
-      score += '-';
-      score += this.getScoreText(this.playerList[1].score);
-    }
-    return score;
   }
 
   private isWin(deltaResult: number) {
@@ -64,6 +59,10 @@ export class TennisGame1 implements TennisGame {
     }
   }
 
+  private getCurrentScoreText() {
+    return this.getScoreText(this.playerList[0].score) + '-' + this.getScoreText(this.playerList[1].score);
+  }
+
   private getScoreText(tempScore: number) {
     switch (tempScore) {
       case 0:
@@ -75,7 +74,7 @@ export class TennisGame1 implements TennisGame {
       case 3:
         return  'Forty';
       default:
-        return ''
+        return '';
     }
   }
 
