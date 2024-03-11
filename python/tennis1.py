@@ -12,9 +12,7 @@ class TennisGame1:
             self.p2_points += 1
 
     def score(self):
-        self.s = ""
-        result = self.s
-        temp_score = 0
+        result = ""
         if self.p1_points == self.p2_points:
             result = {
                 0: "Love-All",
