@@ -50,6 +50,8 @@ test_cases = [
     (16, 14, 'Win for player1', 'player1', 'player2'),
     (14, 16, 'Win for player2', 'player1', 'player2'),
 
+    (4, 0, "Win for Björn Borg", "Björn Borg", "John McEnroe"),
+    (4, 6, "Win for Stefan Edberg", "Boris Becker", "Stefan Edberg"),
 ]
 
 
@@ -57,9 +59,9 @@ def play_game(TennisGame, p1Points, p2Points, p1Name, p2Name):
     game = TennisGame(p1Name, p2Name)
     for i in range(max(p1Points, p2Points)):
         if i < p1Points:
-            game.won_point(p1Name)
+            game.won_point_player1()
         if i < p2Points:
-            game.won_point(p2Name)
+            game.won_point_player2()
     return game
 
 
