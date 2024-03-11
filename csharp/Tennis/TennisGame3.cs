@@ -1,42 +1,46 @@
 namespace Tennis
 {
-    public class TennisGame3 : ITennisGame
+    using System;
+    using static System.Math;
+    
+    public class TennisGame3(string player1Name, string player2Name) : ITennisGame
     {
-        private int p2;
-        private int p1;
-        private string p1N;
-        private string p2N;
-
-        public TennisGame3(string player1Name, string player2Name)
-        {
-            this.p1N = player1Name;
-            this.p2N = player2Name;
-        }
+        private Player player1 = new(player1Name);
+        private Player player2 = new(player2Name);
 
         public string GetScore()
         {
-            string s;
-            if ((p1 < 4 && p2 < 4) && (p1 + p2 < 6))
+            bool winPossible = player1.Score >= 4 || player2.Score >= 4 || 
+                               player1.Score + player2.Score >= 6;
+            if (winPossible)
             {
-                string[] p = { "Love", "Fifteen", "Thirty", "Forty" };
-                s = p[p1];
-                return (p1 == p2) ? s + "-All" : s + "-" + p[p2];
+                if (player1.Score == player2.Score)
+                    return "Deuce";
+                
+                string highScoreName = player1.Score > player2.Score 
+                                        ? player1.Name
+                                        : player2.Name;
+                bool isWin = Abs(player1.Score - player2.Score) >= 2;
+                return isWin ? "Win for " + highScoreName
+                             : "Advantage " + highScoreName;
             }
             else
             {
-                if (p1 == p2)
-                    return "Deuce";
-                s = p1 > p2 ? p1N : p2N;
-                return ((p1 - p2) * (p1 - p2) == 1) ? "Advantage " + s : "Win for " + s;
+                string[] scoreTerms = { "Love", "Fifteen", "Thirty", "Forty" };
+                string player1ScoreTerm = scoreTerms[player1.Score];
+                return (player1.Score == player2.Score) 
+                        ? player1ScoreTerm + "-All" 
+                        : player1ScoreTerm + "-" + scoreTerms[player2.Score];
             }
         }
 
         public void WonPoint(string playerName)
         {
-            if (playerName == "player1")
-                this.p1 += 1;
-            else
-                this.p2 += 1;
+            if (playerName == player1.Name)
+                player1.Score += 1;
+            else if (playerName == player2.Name)
+                player2.Score += 1;
+            else throw new ArgumentException("Bad player name");
         }
 
     }
