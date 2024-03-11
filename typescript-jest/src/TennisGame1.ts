@@ -1,70 +1,81 @@
 import { TennisGame } from './TennisGame';
 
+interface Player {
+  name: string;
+  score: number;
+}
+
 export class TennisGame1 implements TennisGame {
-  private m_score1: number = 0;
-  private m_score2: number = 0;
-  private player1Name: string;
-  private player2Name: string;
+  private playerList: Player[] = [];
 
   constructor(player1Name: string, player2Name: string) {
-    this.player1Name = player1Name;
-    this.player2Name = player2Name;
+    this.playerList.push({name: player1Name, score: 0});
+    this.playerList.push({name: player2Name, score: 0});
   }
 
   wonPoint(playerName: string): void {
-    if (playerName === 'player1')
-      this.m_score1 += 1;
-    else
-      this.m_score2 += 1;
+    const player = this.playerList.find(_ => _.name === playerName);
+    if (player) {
+      player.score += 1;
+    }
   }
 
   getScore(): string {
-    let score: string = '';
-    let tempScore: number = 0;
-    if (this.m_score1 === this.m_score2) {
-      switch (this.m_score1) {
-        case 0:
-          score = 'Love-All';
-          break;
-        case 1:
-          score = 'Fifteen-All';
-          break;
-        case 2:
-          score = 'Thirty-All';
-          break;
-        default:
-          score = 'Deuce';
-          break;
+    const deltaResult = this.playerList[0].score - this.playerList[1].score;
 
-      }
+    if (this.isScoreEqual(deltaResult)) {
+      return this.getEqualScoreStr();
+    } else if (this.isWin(deltaResult)) {
+      return deltaResult > 0 ? 'Win for player1' : 'Win for player2';
+    } else if (this.isMatchPoint(deltaResult)) {
+      return deltaResult > 0 ? 'Advantage player1' : 'Advantage player2';
+    } else {
+      return this.getCurrentScoreText();
     }
-    else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-      const minusResult: number = this.m_score1 - this.m_score2;
-      if (minusResult === 1) score = 'Advantage player1';
-      else if (minusResult === -1) score = 'Advantage player2';
-      else if (minusResult >= 2) score = 'Win for player1';
-      else score = 'Win for player2';
-    }
-    else {
-      for (let i = 1; i < 3; i++) {
-        if (i === 1) tempScore = this.m_score1;
-        else { score += '-'; tempScore = this.m_score2; }
-        switch (tempScore) {
-          case 0:
-            score += 'Love';
-            break;
-          case 1:
-            score += 'Fifteen';
-            break;
-          case 2:
-            score += 'Thirty';
-            break;
-          case 3:
-            score += 'Forty';
-            break;
-        }
-      }
-    }
-    return score;
   }
+
+  private isWin(deltaResult: number) {
+    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && Math.abs(deltaResult) > 1;
+  }
+
+  private isMatchPoint(deltaResult: number) {
+    return (this.playerList[0].score >= 4 || this.playerList[1].score >= 4) && Math.abs(deltaResult) == 1;
+  }
+
+  private isScoreEqual(deltaResult: number) {
+    return deltaResult === 0;
+  }
+
+  private getEqualScoreStr() {
+    switch (this.playerList[0].score) {
+      case 0:
+        return 'Love-All';
+      case 1:
+        return 'Fifteen-All';
+      case 2:
+        return 'Thirty-All';
+      default:
+        return 'Deuce';
+    }
+  }
+
+  private getCurrentScoreText() {
+    return this.getScoreText(this.playerList[0].score) + '-' + this.getScoreText(this.playerList[1].score);
+  }
+
+  private getScoreText(tempScore: number) {
+    switch (tempScore) {
+      case 0:
+        return 'Love';
+      case 1:
+        return  'Fifteen';
+      case 2:
+        return  'Thirty';
+      case 3:
+        return  'Forty';
+      default:
+        return '';
+    }
+  }
+
 }
