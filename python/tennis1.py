@@ -1,9 +1,19 @@
+from enum import IntEnum
+
+
+class Points(IntEnum):
+    LOVE = 0
+    FIFTEEN = 1
+    THIRTY = 2
+    FORTY = 3
+
+
 class TennisGame1:
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
         self.player2_name = player2_name
-        self.p1_points = 0
-        self.p2_points = 0
+        self.p1_points = Points.LOVE
+        self.p2_points = Points.LOVE
 
     def won_point(self, player_name):
         if player_name == "player1":
@@ -15,9 +25,9 @@ class TennisGame1:
         result = ""
         if self.p1_points == self.p2_points:
             result = {
-                0: "Love-All",
-                1: "Fifteen-All",
-                2: "Thirty-All",
+                Points.LOVE: "Love-All",
+                Points.FIFTEEN: "Fifteen-All",
+                Points.THIRTY: "Thirty-All",
             }.get(self.p1_points, "Deuce")
         elif self.p1_points >= 4 or self.p2_points >= 4:
             minus_result = self.p1_points - self.p2_points
@@ -37,9 +47,9 @@ class TennisGame1:
                     result += "-"
                     temp_score = self.p2_points
                 result += {
-                    0: "Love",
-                    1: "Fifteen",
-                    2: "Thirty",
-                    3: "Forty",
+                    Points.LOVE: "Love",
+                    Points.FIFTEEN: "Fifteen",
+                    Points.THIRTY: "Thirty",
+                    Points.FORTY: "Forty",
                 }[temp_score]
         return result
