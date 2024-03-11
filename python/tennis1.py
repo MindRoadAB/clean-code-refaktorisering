@@ -7,6 +7,9 @@ class Points(IntEnum):
     THIRTY = 2
     FORTY = 3
 
+    def pretty(self):
+        return self.name.title()
+
 
 class TennisGame1:
     def __init__(self, player1_name, player2_name):
@@ -23,33 +26,19 @@ class TennisGame1:
 
     def score(self):
         result = ""
-        if self.p1_points == self.p2_points:
-            result = {
-                Points.LOVE: "Love-All",
-                Points.FIFTEEN: "Fifteen-All",
-                Points.THIRTY: "Thirty-All",
-            }.get(self.p1_points, "Deuce")
-        elif self.p1_points >= 4 or self.p2_points >= 4:
-            minus_result = self.p1_points - self.p2_points
-            if minus_result == 1:
+        match (self.p1_points, self.p2_points):
+            case [p1, p2] if p1 == p2 and p1 < Points.FORTY:
+                result = f"{Points(p1).pretty()}-All"
+            case [p1, p2] if p1 == p2:
+                result = "Deuce"
+            case [p1, p2] if p1 <= Points.FORTY and p2 <= Points.FORTY:
+                result = f"{Points(p1).pretty()}-{Points(p2).pretty()}"
+            case [p1, p2] if p1 - p2 == 1:
                 result = "Advantage player1"
-            elif minus_result == -1:
+            case [p1, p2] if p2 - p1 == 1:
                 result = "Advantage player2"
-            elif minus_result >= 2:
+            case [p1, p2] if p1 - p2 > 1:
                 result = "Win for player1"
-            else:
+            case [p1, p2] if p2 - p1 > 1:
                 result = "Win for player2"
-        else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.p1_points
-                else:
-                    result += "-"
-                    temp_score = self.p2_points
-                result += {
-                    Points.LOVE: "Love",
-                    Points.FIFTEEN: "Fifteen",
-                    Points.THIRTY: "Thirty",
-                    Points.FORTY: "Forty",
-                }[temp_score]
         return result
