@@ -50,6 +50,8 @@ test_cases = [
     (16, 14, 'Win for player1', 'player1', 'player2'),
     (14, 16, 'Win for player2', 'player1', 'player2'),
 
+    (4, 0, "Win for Björn Borg", "Björn Borg", "John McEnroe"),
+    (4, 6, "Win for Stefan Edberg", "Boris Becker", "Stefan Edberg"),
 ]
 
 
