@@ -18,12 +18,11 @@ class TennisGame1:
         self.p1_points = Points.LOVE
         self.p2_points = Points.LOVE
 
-    def won_point(self, player_name):
-        match player_name:
-            case self.player1_name:
-                self.p1_points += 1
-            case self.player2_name:
-                self.p2_points += 1
+    def won_point_player1(self):
+        self.p1_points += 1
+
+    def won_point_player2(self):
+        self.p2_points += 1
 
     def score(self):
         result = ""
